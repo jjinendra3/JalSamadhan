@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,16 +7,13 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-} from 'react-native';
-
+  CheckBox,
+} from "react-native";
+import ImagePicker from "../component/ImagePicker";
 const Complaint = ({ navigation }) => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+  const [desc, setdesc] = useState("");
+  const [address, setAddress] = useState("");
   const [photo, setPhoto] = useState(null);
-
-  const handlePhotoUpload = () => {
-    // Implement photo upload logic here, you can use libraries like react-native-image-picker
-  };
 
   const handleSubmit = () => {
     // Implement your submission logic here
@@ -26,14 +23,13 @@ const Complaint = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Name:</Text>
+      <Text style={styles.label}>Description:</Text>
       <TextInput
         style={styles.input}
-        onChangeText={(text) => setName(text)}
-        value={name}
-        placeholder="Enter your name"
+        onChangeText={(text) => setdesc(text)}
+        value={desc}
+        placeholder="Describe the issue"
       />
-
       <Text style={styles.label}>Address:</Text>
       <TextInput
         style={styles.input}
@@ -41,16 +37,10 @@ const Complaint = ({ navigation }) => {
         value={address}
         placeholder="Enter your address"
       />
-
-      <TouchableOpacity onPress={handlePhotoUpload} style={styles.uploadButton}>
-        <Text style={styles.uploadButtonText}>Upload Photo</Text>
-      </TouchableOpacity>
-
-      {photo && (
-        <Image source={{ uri: photo }} style={styles.photoPreview} />
-      )}
-
-      <Button title="Submit" onPress={handleSubmit} />
+      <ImagePicker setimg={setPhoto} />
+      <View style={{ marginTop: 20 }}>
+        <Button title="Submit" onPress={handleSubmit} />
+      </View>
     </View>
   );
 };
@@ -62,26 +52,26 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 10,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
     marginTop: 5,
   },
   uploadButton: {
-    backgroundColor: 'blue',
+    backgroundColor: "blue",
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
-    marginBottom:10
+    marginBottom: 10,
   },
   uploadButtonText: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
   },
   photoPreview: {
     width: 200,

@@ -27,8 +27,12 @@ function Home({ navigation }) {
       <View style={styles.logoContainer}>
         <Image
           source={Logo}
-          style={{ width: 100, height: 100 }}
-          resizeMode="contain"
+          style={{
+            width: 200,
+            height: 100,
+            resizeMode: "contain",
+            marginBottom: 10,
+          }}
         />
       </View>
 

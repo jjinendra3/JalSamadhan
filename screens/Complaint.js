@@ -23,7 +23,9 @@ const Complaint = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Description:</Text>
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 10 }}>
+        Description:
+      </Text>
       <TextInput
         style={styles.input}
         onChangeText={(text) => setdesc(text)}

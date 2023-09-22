@@ -17,11 +17,13 @@ import Announcement from "./screens/Announcement";
 import TOS from "./screens/TOS";
 import Privacy from "./screens/Privacy";
 import StateWise from "./screens/admin_control/StateWise";
-import ComplaintPosts from './screens/admin_control/ComplaintPosts'
+import ComplaintPosts from "./screens/admin_control/ComplaintPosts";
 import AddAnnouncement from "./screens/admin_control/AddAnnouncement";
 import Resource from "./screens/Resource";
 import Request_Resource_Cat from "./screens/admin_control/Request_Resource_Cat";
 import ResourceRequestsScreen from "./screens/admin_control/ResourceRequestsScreen";
+import VerifyContributors from "./screens/admin_control/VerifyContributors";
+import WaterState from "./Data";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Stacker = () => {
@@ -89,7 +91,7 @@ const NormalUser = () => {
           },
         }}
       />
-      
+
       <Tab.Screen
         name="HeatMap"
         component={HeatMap}
@@ -140,54 +142,59 @@ const Profile = () => {
       <Stack.Screen name="contribute" component={Contribute} />
       <Stack.Screen name="tos" component={TOS} />
       <Stack.Screen name="privacy" component={Privacy} />
-      {/* <Stack.Screen name=""/> */}
     </Stack.Navigator>
   );
 };
-// const Admin=()=>{
-//   <Stack.Navigator>
-    
-//   </Stack.Navigator>
-// }
 export default function App() {
   return (
     <>
       <NavigationContainer>
-        <StatusBar style="auto" />
-        <Stack.Navigator
-          // initialRouteName="NormalUser"
-          screenOptions={{
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              fontWeight: "bold",
-            },
-          }}
-        >
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              title: "JalRakshak",
-              headerLeft: () => {
-                return <Ionicons name="add-circle" color="white"></Ionicons>;
+        <WaterState>
+          <StatusBar style="auto" />
+          <Stack.Navigator
+            // initialRouteName="NormalUser"
+            screenOptions={{
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontWeight: "bold",
               },
             }}
-          />
-          <Stack.Screen
-            name="NormalUser"
-            component={NormalUser}
-            options={{ headerShown: false }}
-          />
-          {/* <Stack.Screen name="Admin" component={Admin} /> */}
-          <Stack.Screen name="adminmain" component={Adminer}/>
-    <Stack.Screen name="States" component={StateWise}/>
-    <Stack.Screen name="ComplaintPosts" component={ComplaintPosts}/>
-    <Stack.Screen name="AddAnnouncement" component={AddAnnouncement}/>
-      <Stack.Screen name="Request_Resource_Cat" component={Request_Resource_Cat}/>
-      <Stack.Screen name="ResourceRequestsScreen" component={ResourceRequestsScreen}/>
-          <Stack.Screen name="Signup" component={Signup} />
-          <Stack.Screen name="Profile" component={Profile} />
-        </Stack.Navigator>
+          >
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{
+                title: "JalRakshak",
+                headerLeft: () => {
+                  return <Ionicons name="add-circle" color="white"></Ionicons>;
+                },
+              }}
+            />
+            <Stack.Screen
+              name="NormalUser"
+              component={NormalUser}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="adminmain" component={Adminer} />
+            <Stack.Screen name="States" component={StateWise} />
+            <Stack.Screen name="ComplaintPosts" component={ComplaintPosts} />
+            <Stack.Screen name="AddAnnouncement" component={AddAnnouncement} />
+            <Stack.Screen
+              name="Request_Resource_Cat"
+              component={Request_Resource_Cat}
+            />
+            <Stack.Screen
+              name="ResourceRequestsScreen"
+              component={ResourceRequestsScreen}
+            />
+            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen
+              name="VerifyContributors"
+              component={VerifyContributors}
+            />
+          </Stack.Navigator>
+        </WaterState>
       </NavigationContainer>
     </>
   );

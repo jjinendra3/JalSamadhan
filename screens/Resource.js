@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet,Alert } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 
 function Resource({ navigation }) {
-  const [location, setLocation] = useState('');
-  const [contactNumber, setContactNumber] = useState('');
-  const [additionalDetails, setAdditionalDetails] = useState('');
+  const [location, setLocation] = useState("");
+  const [additionalDetails, setAdditionalDetails] = useState("");
 
   const handleRequestSubmit = () => {
     // Perform the action to submit the resource request here (e.g., send to server)
     // You can replace this with your own logic
     const resourceRequestData = {
       location,
-      contactNumber,
       additionalDetails,
       // Add other fields as needed
     };
@@ -20,12 +25,17 @@ function Resource({ navigation }) {
     const isEmergency = 0; // Replace with your verification logic
 
     if (!isEmergency) {
-      Alert.alert('This feature should only be used during disaster emergencies. Misuse may result in blacklisting from the app.');
+      Alert.alert(
+        "Warning",
+        "This feature should only be used during disaster emergencies. Misuse may result in blacklisting from the app."
+      );
       return;
     }
 
     // If the request is legitimate, proceed with submission
-    Alert.alert(`Resource request submitted: ${JSON.stringify(resourceRequestData)}`);
+    Alert.alert(
+      `Resource request submitted: ${JSON.stringify(resourceRequestData)}`
+    );
     // Optionally, navigate to a confirmation screen or go back to the user's dashboard
     // navigation.goBack();
   };
@@ -33,7 +43,8 @@ function Resource({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.warningText}>
-        This feature should only be used during disaster emergencies. Misuse may result in blacklisting from the app.
+        This feature should only be used during disaster emergencies. Misuse may
+        result in blacklisting from the app.
       </Text>
 
       <Text style={styles.label}>Location:</Text>
@@ -42,15 +53,6 @@ function Resource({ navigation }) {
         placeholder="Enter location"
         value={location}
         onChangeText={(text) => setLocation(text)}
-      />
-
-      <Text style={styles.label}>Contact Number:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter contact number"
-        value={contactNumber}
-        onChangeText={(text) => setContactNumber(text)}
-        keyboardType="phone-pad"
       />
 
       <Text style={styles.label}>Additional Details:</Text>
@@ -63,7 +65,10 @@ function Resource({ navigation }) {
         numberOfLines={4}
       />
 
-      <TouchableOpacity style={styles.submitButton} onPress={handleRequestSubmit}>
+      <TouchableOpacity
+        style={styles.submitButton}
+        onPress={handleRequestSubmit}
+      >
         <Text style={styles.buttonText}>Submit Request</Text>
       </TouchableOpacity>
     </View>
@@ -77,31 +82,31 @@ const styles = StyleSheet.create({
   },
   warningText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: 'red',
+    fontWeight: "bold",
+    color: "red",
     marginBottom: 20,
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   input: {
     height: 40,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: 20,
   },
   submitButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: "#3498db",
     borderRadius: 5,
     paddingVertical: 15,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 

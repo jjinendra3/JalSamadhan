@@ -11,7 +11,7 @@ function Announcement({ route }) {
 
       {/* Announcement Description */}
       <ScrollView style={styles.descriptionContainer}>
-        <Text style={styles.descriptionText}>{description}</Text>
+        <Text style={styles.description}>{description}</Text>
       </ScrollView>
     </View>
   );

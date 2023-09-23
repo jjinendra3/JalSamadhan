@@ -1,31 +1,33 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Button } from 'react-native';
+
+import React, { useContext, useEffect, useState, useRef } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Alert,
+  Button,
+  Modal,
+} from "react-native";
+import Context from "../../ContextAPI";
 
 function PostListScreen({ navigation, route }) {
-  // Fetch the data from the backend based on route.params.name
+  const context = useContext(Context);
   const [postData, setPostData] = useState([
-    {
-      id: '1',
-      title: 'Post 1',
-      description: 'Description for Post 1',
-      upvotes: 10,
-      comments: 5,
-      posterName: 'John Doe',
-      phoneNumber: '+1234567890',
-      resolved: true,
-    },
-    {
-      id: '2',
-      title: 'Post 2',
-      description: 'Description for Post 2',
-      upvotes: 15,
-      comments: 8,
-      posterName: 'Jane Smith',
-      phoneNumber: '+9876543210',
-      resolved: false,
-    },
-    // Add more posts as needed
+    // Your post data
   ]);
+  const [selectedImage, setSelectedImage] = useState(null); // Store the selected image URI
+  const [isImageModalVisible, setImageModalVisible] = useState(false);
+
+  useEffect(() => {
+    async function getter() {
+      const response = await context.getComplaints();
+      setPostData(response);
+    }
+    getter();
+  }, []);
 
   const handlePostClick = (post) => {
     // Handle the click action for the post here
@@ -33,6 +35,11 @@ function PostListScreen({ navigation, route }) {
     Alert.alert(
       `Title: ${post.title}\nDescription: ${post.description}\nUpvotes: ${post.upvotes}\nComments: ${post.comments}\nPoster: ${post.posterName}\nPhone Number: ${post.phoneNumber}`
     );
+  };
+
+  const handleImageClick = (imageUri) => {
+    setSelectedImage(imageUri);
+    setImageModalVisible(true);
   };
 
   const handleResolveClick = (id) => {
@@ -53,28 +60,33 @@ function PostListScreen({ navigation, route }) {
             style={styles.postItem}
             onPress={() => handlePostClick(item)}
           >
-            <Text style={styles.postTitle}>{item.title}</Text>
-            <Text style={styles.postDescription}>{item.description}</Text>
+            <Text style={styles.postDescription}>{item.details}</Text>
             <View style={styles.postInfo}>
-              <Text style={styles.postInfoText}>Upvotes: {item.upvotes}</Text>
-              <Text style={styles.postInfoText}>Comments: {item.comments}</Text>
-              <Text style={styles.postInfoText}>Poster: {item.posterName}</Text>
-              <Text style={styles.postInfoText}>Phone: {item.phoneNumber}</Text>
+              <Text style={styles.postInfoText}>Name: {item.name}</Text>
+              <Text style={styles.postInfoText}>State: {item.state}</Text>
+              <Text style={styles.postInfoText}>Address: {item.add}</Text>
+              <Text style={styles.postInfoText}>Phone: {item.phone}</Text>
               <Text style={styles.postInfoText}>
-                Resolved: {item.resolved ? 'Yes' : 'No'}
+                Resolved: {item.resolved ? "Yes" : "No"}
               </Text>
               <Button
-                title={item.resolved ? 'Mark Unresolved' : 'Mark Resolved'}
+                title={item.resolved ? "Mark Unresolved" : "Mark Resolved"}
                 onPress={() => handleResolveClick(item.id)}
               />
             </View>
+            <TouchableOpacity onPress={() => handleImageClick(item.image)}>
+              <Image
+                source={{ uri: item.image }}
+                style={{ height: 200, width: "100%", borderRadius: 4 }}
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
         )}
       />
     </View>
   );
 }
-
+export default PostListScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -84,23 +96,31 @@ const styles = StyleSheet.create({
   postItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
   },
   postTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   postDescription: {
     fontSize: 16,
     marginVertical: 5,
   },
   postInfo: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   postInfoText: {
     fontSize: 14,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  modalImage: {
+    width: "80%",
+    height: "80%",
+  },
 });
-
-export default PostListScreen;

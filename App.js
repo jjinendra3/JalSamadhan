@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Sos from "./screens/Sos";
-import HeatMap from "./screens/Heatmap";
 import Complaint from "./screens/Complaint";
 import Forum from "./screens/Forum";
 import Home from "./screens/Home";
@@ -23,6 +22,8 @@ import Resource from "./screens/Resource";
 import Request_Resource_Cat from "./screens/admin_control/Request_Resource_Cat";
 import ResourceRequestsScreen from "./screens/admin_control/ResourceRequestsScreen";
 import VerifyContributors from "./screens/admin_control/VerifyContributors";
+import SosDetails from "./screens/SosDetails";
+import Map from "./screens/Map";
 import WaterState from "./Data";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,6 +57,24 @@ const Stacker = () => {
     </Stack.Navigator>
   );
 };
+const Emergency = () => {
+  return (
+    <>
+      <Stack.Navigator initialRouteName="mainemergency">
+        <Stack.Screen
+          name="mainemergency"
+          component={Sos}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SosDetails"
+          component={SosDetails}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </>
+  );
+};
 const NormalUser = () => {
   return (
     <Tab.Navigator
@@ -79,7 +98,6 @@ const NormalUser = () => {
         },
       })}
     >
-      {/* options={{ }} */}
       <Tab.Screen
         name="Stacker"
         component={Stacker}
@@ -94,7 +112,7 @@ const NormalUser = () => {
 
       <Tab.Screen
         name="HeatMap"
-        component={HeatMap}
+        component={Map}
         options={{
           title: "HeatMap",
           tabBarIcon: ({ color, size }) => {
@@ -104,11 +122,11 @@ const NormalUser = () => {
       />
       <Tab.Screen
         name="SOS"
-        component={Sos}
+        component={Emergency}
         options={{
           title: "SOS",
           tabBarIcon: ({ color, size }) => {
-            return <Ionicons name="warning" color={color} size={size} />;
+            return <MaterialIcons name="dangerous" color={color} size={size} />;
           },
         }}
       />
@@ -152,7 +170,7 @@ export default function App() {
         <WaterState>
           <StatusBar style="auto" />
           <Stack.Navigator
-            // initialRouteName="NormalUser"
+            initialRouteName="adminmain"
             screenOptions={{
               headerTitleAlign: "center",
               headerTitleStyle: {
@@ -164,7 +182,7 @@ export default function App() {
               name="Login"
               component={Login}
               options={{
-                title: "JalRakshak",
+                title: "JalSamadhan",
                 headerLeft: () => {
                   return <Ionicons name="add-circle" color="white"></Ionicons>;
                 },

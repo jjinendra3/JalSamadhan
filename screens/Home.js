@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,18 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { Logo } from "../logo.png";
+import Logo from "../logo.png";
+import Context from "../ContextAPI";
 function Home({ navigation }) {
-  // Sample announcements data
-  const announcements = [
-    { id: 1, title: "Announcement 1" },
-    { id: 2, title: "Announcement 2" },
-    { id: 3, title: "Announcement 3" },
-    { id: 4, title: "Announcement 3" },
-    { id: 5, title: "Announcement 3" },
-    { id: 6, title: "Announcement 3" },
-    { id: 7, title: "Announcement 3" },
-    // Add more announcements as needed
-  ];
+  const context = useContext(Context);
+  const [announcements, setannouncements] = useState([]);
+  useEffect(() => {
+    async function ann() {
+      const response = await context.getAnn();
+      setannouncements(response);
+    }
+    ann();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -28,36 +27,38 @@ function Home({ navigation }) {
         <Image
           source={Logo}
           style={{
-            width: 200,
-            height: 100,
+            width: 300,
+            height: 300,
             resizeMode: "contain",
             marginBottom: 10,
           }}
         />
       </View>
-
-      {/* Announcements Section */}
       <View style={styles.announcementsContainer}>
         <Text style={styles.announcementsHeader}>Announcements</Text>
         <ScrollView style={styles.announcementsList}>
-          {announcements.map((announcement) => (
-            <TouchableOpacity
-              key={announcement.id}
-              style={styles.announcementItem}
-              onPress={() => {
-                navigation.navigate("Announcement", {
-                  title: "1",
-                  description: "eehbuhewbuhwbhfbw",
-                });
-              }}
-            >
-              <Text style={styles.announcementTitle}>{announcement.title}</Text>
-            </TouchableOpacity>
-          ))}
+          {announcements.length !== 0 ? (
+            announcements.map((announcement) => (
+              <TouchableOpacity
+                key={announcement.title}
+                style={styles.announcementItem}
+                onPress={() => {
+                  navigation.navigate("Announcement", {
+                    title: announcement.title,
+                    description: announcement.desc,
+                  });
+                }}
+              >
+                <Text style={styles.announcementTitle}>
+                  {announcement.title}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text>No Announcements</Text>
+          )}
         </ScrollView>
       </View>
-
-      {/* Complaints Button */}
       <TouchableOpacity
         style={styles.complaintsButton}
         onPress={() => {

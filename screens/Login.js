@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, Button, Alert, TextInput, StyleSheet } from "react-native";
-import OTPInputView from "@twotalltotems/react-native-otp-input";
-
+import Context from "../ContextAPI";
 function Login({ navigation }) {
+  const context = useContext(Context);
+
   const [phoneNumber, setPhoneNumber] = useState("");
-
+  const [otp, setotp] = useState("");
+  const [admin, setadmin] = useState(0);
   const handleLogin = () => {
-    // Handle login with OTP logic here
-    // You can make an API request to verify the OTP
-    // For simplicity, we'll just display a success message here
-
-    Alert.alert("Login", `${phoneNumber}`, [
-      { text: "NORMAL", onPress: () => navigation.navigate("NormalUser") },
-      { text: "ADMIN", onPress: () => navigation.navigate("adminmain") },
-    ]);
+    if (context.verifyOtp(phoneNumber, otp)) {
+      if (admin) {
+        navigation.navigate("adminmain");
+      } else {
+        navigation.navigate("NormalUser");
+      }
+    }
   };
 
   return (
@@ -34,15 +35,38 @@ function Login({ navigation }) {
         maxLength={10}
         onChangeText={(text) => setPhoneNumber(text)}
       />
-      <Button title="Send OTP" />
-      <OTPInputView
-        pinCount={6}
-        style={{ height: 80, width: "90%" }}
-        selectionColor="black"
-        codeInputFieldStyle={styles.underlineStyleBase}
-        codeInputHighlightStyle={styles.underlineStyleHighLighted}
-        onCodeFilled={handleLogin}
+      <Button
+        title="Send OTP"
+        onPress={async () => {
+          const obj = await context.login(phoneNumber);
+          if (Object.keys(obj).length !== 0) {
+            if (obj.admin) {
+              navigation.navigate("adminmain");
+            } else {
+              navigation.navigate("NormalUser");
+            }
+          } else {
+            Alert.alert("INvalid");
+          }
+        }}
       />
+      <TextInput
+        style={{
+          height: 50,
+          fontSize: 32,
+          borderWidth: 2,
+          fontWeight: "bold",
+          marginVertical: 4,
+          textAlign: "center",
+          width: "90%",
+        }}
+        placeholder="OTP"
+        keyboardType="numeric"
+        maxLength={6}
+        onChangeText={(text) => setotp(text)}
+      />
+      <Button title="Submit OTP" onPress={handleLogin} />
+
       <Text style={{ marginTop: 20 }}>Not a user? Sign up now</Text>
       <Button
         title="Signup"

@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import OTPInputView from "@twotalltotems/react-native-otp-input";
 import Context from "../ContextAPI";
 
 function Signup({ navigation }) {
+  const context = useContext(Context);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -42,20 +42,14 @@ function Signup({ navigation }) {
         maxLength={10}
         onChangeText={(text) => setPhoneNumber(text)}
       />
-      <Button title="Send OTP" onPress={() => {}} />
-      <Text>OTP:</Text>
-      <OTPInputView
-        pinCount={6}
-        style={{ height: 80, width: "90%" }}
-        selectionColor="black"
-        codeInputFieldStyle={styles.underlineStyleBase}
-        codeInputHighlightStyle={styles.underlineStyleHighLighted}
-        onCodeFilled={() => {
+      <Button
+        title="Signup"
+        onPress={() => {
+          context.signUp(name, phoneNumber, selectedState);
           navigation.navigate("NormalUser");
         }}
       />
-
-      {/* State/UT Modal */}
+      
       <Modal
         animationType="slide"
         transparent={true}

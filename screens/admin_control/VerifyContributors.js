@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,30 +12,15 @@ import {
 
 function VerifyContributors({ navigation }) {
   const [selectedContributor, setSelectedContributor] = useState(null);
-  const [contributorData, setContributorData] = useState([
-    // Initial contributor data
-    {
-      id: "1",
-      name: "John Doe",
-      phoneNumber: "+1234567890",
-      address: "123 Main St, City",
-      aadharCardPhoto: require("../../logo.png"),
-      panCardPhoto: require("../../logo.png"),
-      licensePhoto: require("../../logo.png"),
-      verificationStatus: "Pending",
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      phoneNumber: "+9876543210",
-      address: "456 Elm St, Town",
-      aadharCardPhoto: require("../../logo.png"),
-      panCardPhoto: require("../../logo.png"),
-      licensePhoto: require("../../logo.png"),
-      verificationStatus: "Pending",
-    },
-    // Add more contributor data as needed
-  ]);
+  const [contributorData, setContributorData] = useState([]);
+  useEffect(() => {
+    async function caller(){
+      const response=await axios.get('http://localhost:5000/unacceptedContributors');
+      console.log(response.data);
+      setContributorData(response.data.contributors);
+    }
+    caller();
+  }, [])
 
   // Function to handle opening the modal with images
   const openImageModal = (contributor) => {
@@ -47,15 +33,18 @@ function VerifyContributors({ navigation }) {
   };
 
   // Function to approve a contributor
-  const approveContributor = (contributorId) => {
+  const approveContributor =async (id) => {
     // Implement logic to approve the contributor with the given ID
     // For example, update the verificationStatus to 'Approved'
+    const response=await axios.put(`http://localhost:5000/acceptcontri/${id}`);
+    console.log(response.data);
+    if(response.data.success){
     const updatedData = contributorData.map((contributor) =>
-      contributor.id === contributorId
-        ? { ...contributor, verificationStatus: "Approved" }
+      contributor.id === id
+        ? { ...contributor, isApproved: "Approved" }
         : contributor
     );
-    setContributorData(updatedData);
+    setContributorData(response.data.s);}
   };
 
   // Function to reject a contributor
@@ -81,7 +70,7 @@ function VerifyContributors({ navigation }) {
             <Text>Name: {item.name}</Text>
             <Text>Phone Number: {item.phoneNumber}</Text>
             <Text>Address: {item.address}</Text>
-            <Text>Status: {item.verificationStatus}</Text>
+            <Text>Status: {item.isApproved?'Approved':'Pending/Rejected'}</Text>
             <View style={{ marginTop: 10, marginBottom: 10 }}>
               <Button
                 title="View Images"
@@ -91,7 +80,7 @@ function VerifyContributors({ navigation }) {
             <View style={{ marginTop: 10, marginBottom: 10 }}>
               <Button
                 title="Approve"
-                onPress={() => approveContributor(item.id)}
+                onPress={() => approveContributor(item._id)}
                 style={styles.approveButton}
               />
             </View>
@@ -117,17 +106,17 @@ function VerifyContributors({ navigation }) {
             <View>
               <Text>Aadhar Card:</Text>
               <Image
-                source={selectedContributor.aadharCardPhoto}
+               source={{ uri: selectedContributor.aadhar }}
                 style={styles.image}
               />
               <Text>Pan Card:</Text>
               <Image
-                source={selectedContributor.panCardPhoto}
+               source={{ uri: selectedContributor.pan }}
                 style={styles.image}
               />
               <Text>License:</Text>
               <Image
-                source={selectedContributor.licensePhoto}
+               source={{ uri: selectedContributor.doc }}
                 style={styles.image}
               />
             </View>

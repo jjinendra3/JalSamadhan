@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -8,21 +8,54 @@ import {
   ScrollView,
 } from "react-native";
 import ImagePicker from "../component/ImagePicker";
+import axios from "axios";
+import Context from "../ContextAPI";
 function Contribute({ navigation }) {
+  const context = useContext(Context);
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [category, setcat] = useState("");
   const [aadharCardPhoto, setAadharCardPhoto] = useState(null);
   const [panCardPhoto, setPanCardPhoto] = useState(null);
   const [licensePhoto, setLicensePhoto] = useState(null);
 
-  const handleRegistration = () => {
-    // Handle registration logic here
-    // You can send this data to your backend for processing and verification
+  const handleRegistration = async () => {
+    const config = {
+      method: "post",
+      url: "http://localhost:5000/contribute",
+      headers: {
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUwZGIwZTllZTI2ZTI0OGEwNjg1NzNjIn0sImlhdCI6MTY5NTM5OTA3M30.tZiskL9URV9Bn5SX4MdKmeH5YMPh68AGAbZvZKpuyZk",
+      },
+      data: {
+        name: name,
+        phone: phoneNumber,
+        address: address,
+        category: category,
+        aadhar: aadharCardPhoto,
+        pan: panCardPhoto,
+        doc: licensePhoto,
+      },
+    };
 
-    // For simplicity, we'll just display a success message here
-    Alert.alert("Registration successful!");
-    navigation.goBack();
+    // Send the POST request
+    axios(config)
+      .then(function (response) {
+        // Handle the response data here
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        // Handle any errors here
+        console.error("Error:", error);
+      });
+    setName("");
+    setPhoneNumber("");
+    setAddress("");
+    setcat("");
+    setAadharCardPhoto(null);
+    setLicensePhoto(null);
+    setPanCardPhoto(null);
   };
 
   return (
@@ -41,6 +74,12 @@ function Contribute({ navigation }) {
           keyboardType="numeric"
           value={phoneNumber}
           onChangeText={(text) => setPhoneNumber(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Category"
+          value={category}
+          onChangeText={(text) => setcat(text)}
         />
         <TextInput
           style={styles.input}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -10,15 +10,16 @@ import {
   CheckBox,
 } from "react-native";
 import ImagePicker from "../component/ImagePicker";
+import Context from "../ContextAPI";
 const Complaint = ({ navigation }) => {
+  const context = useContext(Context);
   const [desc, setdesc] = useState("");
   const [address, setAddress] = useState("");
   const [photo, setPhoto] = useState(null);
 
   const handleSubmit = () => {
-    // Implement your submission logic here
-    // You can send the complaint details to your backend server or perform any necessary actions.
-    // After submitting, you can navigate to another screen or show a confirmation message.
+    console.log(context.COMPLAINT(photo, desc, address));
+    navigation.navigate("Home");
   };
 
   return (

@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet,Alert } from 'react-native';
-
+import React, { useContext, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import Context from "../../ContextAPI";
 function AddAnnouncement({ navigation }) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const context = useContext(Context);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handleAddAnnouncement = () => {
-    // Perform the action to add the announcement here (e.g., send to server)
-    // You can replace this with your own logic
-    const newAnnouncement = {
-      title,
-      description,
-      // Add other announcement properties as needed
-    };
-    
-    // Alert or navigate back to the admin panel after successfully adding the announcement
-    Alert.alert(`Announcement added: ${JSON.stringify(newAnnouncement)}`);
-    navigation.goBack();
+  const handleAddAnnouncement = async () => {
+    context.AddAnn(title, description);
   };
 
   return (
@@ -39,7 +36,10 @@ function AddAnnouncement({ navigation }) {
         onChangeText={(text) => setDescription(text)}
       />
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAddAnnouncement}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={handleAddAnnouncement}
+      >
         <Text style={styles.buttonText}>Add Announcement</Text>
       </TouchableOpacity>
     </View>
@@ -53,25 +53,25 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   input: {
     height: 40,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: 20,
   },
   addButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: "#3498db",
     borderRadius: 5,
     paddingVertical: 15,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 

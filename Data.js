@@ -2,9 +2,9 @@ import { useState } from "react";
 import Context from "./ContextAPI";
 import axios from "axios";
 const WaterState = ({ children }) => {
-  const [name, setname] = useState("Jinendra");
-  const [phone, setphone] = useState("8779153919");
-  const [state, setstate] = useState("Uttar Pradesh");
+  const [name, setname] = useState("");
+  const [phone, setphone] = useState("");
+  const [state, setstate] = useState("");
   const [admin, setadmin] = useState(false);
   const [authtoken, setauthtoken] = useState(null);
   const stateAndUTData = [
@@ -69,68 +69,9 @@ const WaterState = ({ children }) => {
     { id: "34", name: "Uttar Pradesh", latitude: 26.8467, longitude: 80.9462 },
     { id: "35", name: "Uttarakhand", latitude: 30.0668, longitude: 79.0193 },
   ];
+  const BASE_URL = "https://bytebrigade-2023-default-rtdb.firebaseio.com";
 
-  //AUTHORIZATION
-  const sendOtp = async (phone) => {
-    phone = "+91" + phone;
-    console.log(phone);
-    const options = {
-      method: "POST",
-      url: "https://wipple-sms-verify-otp.p.rapidapi.com/send",
-      headers: {
-        "content-type": "application/json",
-        "X-RapidAPI-Key": "78366f625fmshf30de0582f26d88p1c772cjsne4295fecd382",
-        "X-RapidAPI-Host": "wipple-sms-verify-otp.p.rapidapi.com",
-      },
-      // Pass the data directly as the request body
-      data: {
-        app_name: "JalSamadhan",
-        code_length: 6,
-        code_type: "number",
-        expiration_second: 86000,
-        phone_number: phone,
-      },
-    };
-
-    try {
-      const response = await axios.request(options);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-      console.error(error);
-    }
-  };
-
-  const verifyOtp = async (phone, otp) => {
-    phone = "+91" + phone;
-    console.log(otp);
-    const options = {
-      method: "GET",
-      url: "https://wipple-sms-verify-otp.p.rapidapi.com/verify",
-      params: {
-        phone_number: phone,
-        verification_code: otp,
-        app_name: "JalSamadhan",
-      },
-      headers: {
-        "X-RapidAPI-Key": "78366f625fmshf30de0582f26d88p1c772cjsne4295fecd382",
-        "X-RapidAPI-Host": "wipple-sms-verify-otp.p.rapidapi.com",
-      },
-    };
-
-    try {
-      const response = await axios.request(options);
-      console.log(response.data);
-      return response.data.is_valid;
-    } catch (error) {
-      console.log(error);
-      console.error(error);
-    }
-  };
-
-  const BASE_URL = "https://bytebrigade-2023-default-rtdb.firebaseio.com"; // Replace with your server URL
-
-  // User Sign-up function
+  // Authorization
   const signUp = async (name, phone, state) => {
     try {
       setname(name);
@@ -155,7 +96,6 @@ const WaterState = ({ children }) => {
       setphone(phone);
       const response = await axios.get(`${BASE_URL}/user.json`);
       for (i in response.data) {
-        console.log(response.data[i].phone);
         if (response.data[i].phone === phone) {
           setname(response.data[i].name);
           setstate(response.data[i].state);
@@ -260,10 +200,10 @@ const WaterState = ({ children }) => {
       const response = await axios.get(`${BASE_URL}/SOS.json`);
       let arr = [];
       for (i in response.data) {
-        const obj={
-          latitude:response.data[i].latitude,
-          longitude:response.data[i].longitude
-        }
+        const obj = {
+          latitude: response.data[i].latitude,
+          longitude: response.data[i].longitude,
+        };
         arr.push(obj);
       }
       return arr;
@@ -273,17 +213,156 @@ const WaterState = ({ children }) => {
     }
   };
   //HEATMAP DATA FETCH
+
+  //CONTRIBUTOR
+  const AddContri = async (
+    Name,
+    Phone,
+    Address,
+    Category,
+    State,
+    Aadhar,
+    Pan,
+    Doc
+  ) => {
+    try {
+      let verified = 0;
+      const response = await axios.post(`${BASE_URL}/Contributor.json`, {
+        Name,
+        Phone,
+        Address,
+        Category,
+        State,
+        Aadhar,
+        Pan,
+        Doc,
+        verified,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error during add-up:", error);
+      return { success: false, error: "Error occurred during sign-up" };
+    }
+  };
+  const getContris = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/Contributor.json`);
+      let arr = [];
+      for (i in response.data) {
+        const obj = {
+          Id: i,
+          Name: response.data[i].Name,
+          Phone: response.data[i].Phone,
+          Address: response.data[i].Address,
+          Category: response.data[i].Category,
+          State: response.data[i].State,
+          Aadhar: response.data[i].Aadhar,
+          Pan: response.data[i].Pan,
+          verified: response.data[i].verified,
+        };
+        arr.push(obj);
+      }
+      return arr;
+    } catch (error) {
+      console.error("Error during add-up:", error);
+      return { success: false, error: "Error occurred during sign-up" };
+    }
+  };
+  const ApproveContri = async (id, veri) => {
+    try {
+      let verified = 0;
+      const okay = await axios.get(`${BASE_URL}/Contributor/${id}.json`);
+      const obj = okay.data;
+      console.log(obj);
+      const response = await axios.put(`${BASE_URL}/Contributor/${id}.json`, {
+        Name: obj.Name,
+        Phone: obj.Phone,
+        Address: obj.Address,
+        Category: obj.Category,
+        State: obj.State,
+        Aadhar: obj.Aadhar,
+        Pan: obj.Pan,
+        verified: veri,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error during add-up:", error);
+      return { success: false, error: "Error occurred during sign-up" };
+    }
+  };
+  //CONTRIBUTOR
+
+  //RESOURCE
+  const AddResReq = async (details, add, latitude,longitude,cat) => {
+    try {
+      let solved = 0;
+      console.log(latitude,longitude)
+      const response = await axios.post(`${BASE_URL}/Resource.json`, {
+        details,
+        add,
+        latitude,longitude,cat,
+        solved,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error during add-up:", error);
+      return { success: false, error: "Error occurred during sign-up" };
+    }
+  };
+  const GetResReq=async(cat)=>{
+    try {
+      const response = await axios.get(`${BASE_URL}/Resource.json`);
+      let arr=[];
+      for(i in response.data){
+        if(response.data[i].cat===cat){
+          arr.push({
+            id:i,
+            details:response.data[i].details,
+            add: response.data[i].add,
+            latitude: response.data[i].latitude,
+            longitude: response.data[i].longitude,
+            cat: response.data[i].cat,
+            solved: response.data[i].solved
+          })
+        }
+      }
+      return arr;
+    } catch (error) {
+      console.error("Error during add-up:", error);
+      return { success: false, error: "Error occurred during sign-up" };
+    }
+  }
+  const ApproveReq = async (id, veri) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/Resource/${id}.json`);
+      const okay = await axios.put(`${BASE_URL}/Resource/${id}.json`, {
+        details:response.data.details,
+            add: response.data.add,
+            latitude: response.data.latitude,
+            longitude: response.data.longitude,
+            cat: response.data.cat,
+            solved: veri
+      });
+      console.log('ok');
+      return okay.data;
+    } catch (error) {
+      console.error("Error during add-up:", error);
+      return { success: false, error: "Error occurred during sign-up" };
+    }
+  };
+  //RESOURCE
   return (
     <Context.Provider
       value={{
         stateAndUTData,
-        sendOtp,
-        verifyOtp,
         setauthtoken,
         authtoken,
         name,
+        setname,
         phone,
+        setphone,
         state,
+        setstate,
         signUp,
         login,
         AddAnn,
@@ -291,7 +370,12 @@ const WaterState = ({ children }) => {
         SOS,
         COMPLAINT,
         getComplaints,
-        getPoints
+        getPoints,
+        setadmin,
+        AddContri,
+        getContris,
+        ApproveContri,
+        AddResReq,GetResReq,ApproveReq
       }}
     >
       {children}

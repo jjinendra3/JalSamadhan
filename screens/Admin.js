@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-
+import Context from '../ContextAPI';
 function Admin({ navigation }) {
-  // Replace with actual admin user data
-  const adminName = 'Admin Name';
-  const adminPhoneNumber = '123-456-7890';
+const context=useContext(Context);
+  const adminName = context.name;
+  const adminPhoneNumber = context.phone;
   const handleLogout = () => {
-    // Implement logout logic here
-    // For example, clearing authentication tokens and navigating to the login screen
+    context.setname('');
+    context.setphone('');
+    context.setstate('');
     navigation.navigate('Login');
   };
 

@@ -4,10 +4,7 @@ import {
   Text,
   TextInput,
   Button,
-  Image,
   StyleSheet,
-  TouchableOpacity,
-  CheckBox,
 } from "react-native";
 import ImagePicker from "../component/ImagePicker";
 import Context from "../ContextAPI";

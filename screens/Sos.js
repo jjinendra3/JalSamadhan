@@ -16,7 +16,6 @@ function SOSButton({ navigation }) {
   const handlePressIn = () => {
     setIsCounting(true);
 
-    // Animate the button scale only if pressed for 5 seconds
     setTimeout(() => {
       if (isCounting) {
         Animated.timing(animationValue, {
@@ -25,10 +24,8 @@ function SOSButton({ navigation }) {
           easing: Easing.linear,
           useNativeDriver: true,
         }).start(() => {
-          setIsCounting(false); // Reset isCounting after animation
-          animationValue.setValue(0); // Reset the animation
-
-          // Navigate to the next page when activated
+          setIsCounting(false);
+          animationValue.setValue(0);
           navigation.navigate("SosDetails");
         });
       }
@@ -36,9 +33,7 @@ function SOSButton({ navigation }) {
   };
 
   const handlePressOut = () => {
-    setIsCounting(false); // Reset isCounting when released
-
-    // Reset the animation
+    setIsCounting(false); 
     animationValue.setValue(0);
   };
 
@@ -56,7 +51,7 @@ function SOSButton({ navigation }) {
                 {
                   scale: animationValue.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [1, 1.5], // Scale up when pressed for 5 seconds
+                    outputRange: [1, 1.5], 
                   }),
                 },
               ],
@@ -74,7 +69,6 @@ function SOSButton({ navigation }) {
               strokeWidth={15}
               colors={["#ff1100"]}
               onComplete={() => {
-                // Do nothing here as we handle navigation in handlePressIn
                 navigation.navigate("SosDetails");
               }}
             >

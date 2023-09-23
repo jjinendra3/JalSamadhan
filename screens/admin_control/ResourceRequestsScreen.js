@@ -1,50 +1,27 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import Context from '../../ContextAPI';
+function resreqScreen({ navigation,route }) {
+  const context=useContext(Context)
+  const [resreq, setresreq] = useState([]);
+  useEffect(() => {
+    async function getter(){
+      const response=await context.GetResReq(route.params.cat)
+      setresreq(response);
+    }
+    getter();
+  }, [])
+  
 
-function ResourceRequestsScreen({ navigation,route }) {
-  //fetch data using route.params.cat based on the categorisation
-  // Placeholder data for demonstration purposes
-  const [resourceRequests, setResourceRequests] = useState([
-    {
-      id: '1',
-      name: 'John Doe',
-      location: '123 Main St, City',
-      contactNumber: '555-555-5555',
-      details: 'Urgently need clean drinking water.',
-      isResolved: false,
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      location: '456 Elm St, Town',
-      contactNumber: '555-123-4567',
-      details: 'Seeking shelter for a family of four.',
-      isResolved: true,
-    },
-    // Add more resource request objects as needed
-  ]);
-
-  const handleMarkResolved = (id) => {
-    // Implement the logic to mark a resource request as resolved
-    const updatedRequests = resourceRequests.map((request) =>
-      request.id === id ? { ...request, isResolved: true } : request
-    );
-    setResourceRequests(updatedRequests);
-  };
-
-  const handleMarkUnresolved = (id) => {
-    // Implement the logic to mark a resource request as unresolved
-    const updatedRequests = resourceRequests.map((request) =>
-      request.id === id ? { ...request, isResolved: false } : request
-    );
-    setResourceRequests(updatedRequests);
+  const handleMarkResolved = async(id,veri) => {
+    const response=await context.ApproveReq(id,veri);
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Resource Requests</Text>
       <FlatList
-        data={resourceRequests}
+        data={resreq}
         keyExtractor={(item) => item.id}
         renderItem={( {item} ) => (
           <View style={styles.requestItem}>
@@ -56,14 +33,14 @@ function ResourceRequestsScreen({ navigation,route }) {
             {!item.isResolved ? (
               <TouchableOpacity
                 style={styles.resolveButton}
-                onPress={() => handleMarkResolved(item.id)}
+                onPress={() => handleMarkResolved(item.id,1)}
               >
                 <Text style={styles.buttonText}>Mark Resolved</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 style={styles.unresolveButton}
-                onPress={() => handleMarkUnresolved(item.id)}
+                onPress={() => handleMarkResolved(item.id,0)}
               >
                 <Text style={styles.buttonText}>Mark Unresolved</Text>
               </TouchableOpacity>
@@ -111,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResourceRequestsScreen;
+export default resreqScreen;

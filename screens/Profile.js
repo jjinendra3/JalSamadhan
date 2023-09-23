@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-
+import Context from "../ContextAPI";
 function Profile({ navigation }) {
+  const context=useContext(Context)
   const user = {
-    name: "John Doe",
-    phoneNumber: "+1234567890",
+    name: context.name,
+    phoneNumber: context.phone,
   };
 
   const handleLogout = () => {
+    context.setname('');
+    context.setphone('');
+    context.setstate('');
     navigation.navigate("Login");
   };
 

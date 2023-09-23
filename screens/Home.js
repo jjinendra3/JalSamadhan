@@ -22,7 +22,6 @@ function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Logo Section */}
       <View style={styles.logoContainer}>
         <Image
           source={Logo}
@@ -79,17 +78,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoContainer: {
-    flex: 3, // 30% of the page
+    flex: 3, 
     justifyContent: "center",
     alignItems: "center",
   },
   logo: {
     width: 100,
     height: 100,
-    // Add additional styles for your logo here
   },
   announcementsContainer: {
-    flex: 3, // 40% of the page
+    flex: 3,
     marginTop: 20,
     paddingHorizontal: 10,
     borderWidth: 1,

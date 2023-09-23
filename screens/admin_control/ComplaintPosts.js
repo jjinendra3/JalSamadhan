@@ -9,17 +9,15 @@ import {
   Image,
   Alert,
   Button,
-  Modal,
 } from "react-native";
 import Context from "../../ContextAPI";
 
 function PostListScreen({ navigation, route }) {
   const context = useContext(Context);
   const [postData, setPostData] = useState([
-    // Your post data
   ]);
-  const [selectedImage, setSelectedImage] = useState(null); // Store the selected image URI
-  const [isImageModalVisible, setImageModalVisible] = useState(false);
+  const [img, setimg] = useState(null);
+  const [imgmodvis, setimgmodvis] = useState(false);
 
   useEffect(() => {
     async function getter() {
@@ -30,20 +28,17 @@ function PostListScreen({ navigation, route }) {
   }, []);
 
   const handlePostClick = (post) => {
-    // Handle the click action for the post here
-    // For now, we'll just display an alert with post details
     Alert.alert(
       `Title: ${post.title}\nDescription: ${post.description}\nUpvotes: ${post.upvotes}\nComments: ${post.comments}\nPoster: ${post.posterName}\nPhone Number: ${post.phoneNumber}`
     );
   };
 
   const handleImageClick = (imageUri) => {
-    setSelectedImage(imageUri);
-    setImageModalVisible(true);
+    setimg(imageUri);
+    setimgmodvis(true);
   };
 
   const handleResolveClick = (id) => {
-    // Implement the logic to mark a post as resolved or unresolved
     const updatedPosts = postData.map((post) =>
       post.id === id ? { ...post, resolved: !post.resolved } : post
     );

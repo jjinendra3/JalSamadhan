@@ -5,16 +5,21 @@ function Login({ navigation }) {
   const context = useContext(Context);
 
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setotp] = useState("");
-  const [admin, setadmin] = useState(0);
-  const handleLogin = () => {
-    if (context.verifyOtp(phoneNumber, otp)) {
-      if (admin) {
-        navigation.navigate("adminmain");
-      } else {
-        navigation.navigate("NormalUser");
-      }
+  const handleLogin = async() => {
+const response=await context.login(phoneNumber);
+    if(Object.keys(response).length !== 0){
+    context.setadmin(response.admin);
+    context.setname(response.name);
+    context.setstate(response.state);
+    if(response.admin){
+      navigation.navigate('adminmain');
+    }else{
+      navigation.navigate('NormalUser');
     }
+}else{
+  Alert.alert("Invalid","Use correct credentials or signup!");
+  return;
+}
   };
 
   return (
@@ -35,39 +40,9 @@ function Login({ navigation }) {
         maxLength={10}
         onChangeText={(text) => setPhoneNumber(text)}
       />
-      <Button
-        title="Send OTP"
-        onPress={async () => {
-          const obj = await context.login(phoneNumber);
-          if (Object.keys(obj).length !== 0) {
-            if (obj.admin) {
-              navigation.navigate("adminmain");
-            } else {
-              navigation.navigate("NormalUser");
-            }
-          } else {
-            Alert.alert("INvalid");
-          }
-        }}
-      />
-      <TextInput
-        style={{
-          height: 50,
-          fontSize: 32,
-          borderWidth: 2,
-          fontWeight: "bold",
-          marginVertical: 4,
-          textAlign: "center",
-          width: "90%",
-        }}
-        placeholder="OTP"
-        keyboardType="numeric"
-        maxLength={6}
-        onChangeText={(text) => setotp(text)}
-      />
-      <Button title="Submit OTP" onPress={handleLogin} />
-
-      <Text style={{ marginTop: 20 }}>Not a user? Sign up now</Text>
+      
+      <Button title="Login" onPress={handleLogin} />
+      <Text style={{ marginVertical: 20 }}>Not a user? Sign up now</Text>
       <Button
         title="Signup"
         onPress={() => {

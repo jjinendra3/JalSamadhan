@@ -9,7 +9,6 @@ import {
   StyleSheet,
 } from "react-native";
 
-// Sample post data
 const postDetails = {
   id: "1",
   title: "Post 1",
@@ -20,7 +19,6 @@ const postDetails = {
   comments: [
     { id: "1", text: "Comment 1" },
     { id: "2", text: "Comment 2" },
-    // Add more comments as needed
   ],
 };
 
@@ -29,13 +27,11 @@ function PostDetailsScreen() {
   const [newComment, setNewComment] = useState("");
 
   const handleUpvote = () => {
-    // Increment the upvote count for the post
     setPost({ ...post, upvotes: post.upvotes + 1 });
   };
 
   const handleAddComment = () => {
     if (newComment.trim() !== "") {
-      // Add a new comment to the post
       const updatedComments = [
         ...post.comments,
         { id: Date.now().toString(), text: newComment },

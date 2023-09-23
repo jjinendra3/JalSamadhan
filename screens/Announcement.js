@@ -2,14 +2,11 @@ import React from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 
 function Announcement({ route }) {
-  const { title, description } = route.params; // Get title and description from the navigation route
+  const { title, description } = route.params;
 
   return (
     <View style={styles.container}>
-      {/* Announcement Title */}
       <Text style={styles.title}>{title}</Text>
-
-      {/* Announcement Description */}
       <ScrollView style={styles.descriptionContainer}>
         <Text style={styles.description}>{description}</Text>
       </ScrollView>

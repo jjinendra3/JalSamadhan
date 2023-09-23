@@ -7,7 +7,6 @@ import {
   StyleSheet,
 } from "react-native";
 
-// Sample post data
 const postData = [
   {
     id: "1",
@@ -21,14 +20,12 @@ const postData = [
     upvotes: 15,
     comments: 8,
   },
-  // Add more posts as needed
 ];
 
 function ForumScreen() {
   const [posts, setPosts] = useState(postData);
 
   const handleUpvote = (postId) => {
-    // Find the post by ID and increment the upvote count
     const updatedPosts = posts.map((post) =>
       post.id === postId ? { ...post, upvotes: post.upvotes + 1 } : post
     );
@@ -36,8 +33,6 @@ function ForumScreen() {
   };
 
   const handleComment = (postId) => {
-    // Navigate to a comment screen or handle comments in some way
-    // You can implement this as needed for your application
   };
 
   const renderPostItem = ({ item }) => (

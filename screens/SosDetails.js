@@ -11,7 +11,6 @@ import {
   TextInput,
 } from "react-native";
 import ImagePicker from "../component/ImagePicker";
-import LocationPick from "../component/LocationPick";
 import Context from "../ContextAPI";
 import * as Location from 'expo-location'
 function DisasterReport({ navigation }) {
@@ -72,7 +71,6 @@ function DisasterReport({ navigation }) {
         <ScrollView>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Report Disaster</Text>
-            {/* <ScrollView style={styles.categoriesContainer}> */}
             {categories.map((category) => (
               <TouchableOpacity
                 key={category}
@@ -97,7 +95,6 @@ function DisasterReport({ navigation }) {
                 </Text>
               </TouchableOpacity>
             ))}
-            {/* <LocationPick setlocation={setLocation} /> */}
             <Text>Additional Details:</Text>
             <TextInput
               style={styles.input}
@@ -117,7 +114,6 @@ function DisasterReport({ navigation }) {
             <View style={{ marginVertical: 5 }}>
               <Button title="Cancel" onPress={toggleModal} />
             </View>
-            {/* submitReport */}
           </View>
         </ScrollView>
       </Modal>

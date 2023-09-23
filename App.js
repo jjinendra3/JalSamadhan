@@ -170,7 +170,7 @@ export default function App() {
         <WaterState>
           <StatusBar style="auto" />
           <Stack.Navigator
-            initialRouteName="adminmain"
+            // initialRouteName="adminmain"
             screenOptions={{
               headerTitleAlign: "center",
               headerTitleStyle: {

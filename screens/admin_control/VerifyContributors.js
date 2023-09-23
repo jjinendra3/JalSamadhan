@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,114 +9,90 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-
+import Context from "../../ContextAPI";
 function VerifyContributors({ navigation }) {
-  const [selectedContributor, setSelectedContributor] = useState(null);
-  const [contributorData, setContributorData] = useState([]);
+  const context=useContext(Context);
+  const [mod, setmod] = useState(null);
+  const [condata, setcondata] = useState([]);
+
   useEffect(() => {
-    async function caller(){
-      const response=await axios.get('http://localhost:5000/unacceptedContributors');
-      console.log(response.data);
-      setContributorData(response.data.contributors);
+    async function fetchContributors() {
+      const response = await context.getContris();
+      // console.log(response);
+      setcondata(response);
     }
-    caller();
-  }, [])
+    fetchContributors();
+  }, []);
 
-  // Function to handle opening the modal with images
   const openImageModal = (contributor) => {
-    setSelectedContributor(contributor);
+    setmod(contributor);
   };
 
-  // Function to close the image modal
   const closeImageModal = () => {
-    setSelectedContributor(null);
+    setmod(null);
   };
 
-  // Function to approve a contributor
-  const approveContributor =async (id) => {
-    // Implement logic to approve the contributor with the given ID
-    // For example, update the verificationStatus to 'Approved'
-    const response=await axios.put(`http://localhost:5000/acceptcontri/${id}`);
-    console.log(response.data);
-    if(response.data.success){
-    const updatedData = contributorData.map((contributor) =>
-      contributor.id === id
-        ? { ...contributor, isApproved: "Approved" }
-        : contributor
-    );
-    setContributorData(response.data.s);}
-  };
-
-  // Function to reject a contributor
-  const rejectContributor = (contributorId) => {
-    // Implement logic to reject the contributor with the given ID
-    // For example, update the verificationStatus to 'Rejected'
-    const updatedData = contributorData.map((contributor) =>
-      contributor.id === contributorId
-        ? { ...contributor, verificationStatus: "Rejected" }
-        : contributor
-    );
-    setContributorData(updatedData);
+  const approver = async (id,veri) => {
+    const response=await context.ApproveContri(id,veri);
+   
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Contributors Awaiting Verification</Text>
       <FlatList
-        data={contributorData}
-        keyExtractor={(item) => item.id}
+        data={condata}
+        keyExtractor={(item) => item.Id}
         renderItem={({ item }) => (
           <View style={styles.contributorBlock}>
-            <Text>Name: {item.name}</Text>
-            <Text>Phone Number: {item.phoneNumber}</Text>
-            <Text>Address: {item.address}</Text>
-            <Text>Status: {item.isApproved?'Approved':'Pending/Rejected'}</Text>
+            <Text>Name: {item.Name}</Text>
+            <Text>Phone Number: {item.Phone}</Text>
+            <Text>Address: {item.Address}</Text>
+            <Text>Status: {item.verified ? "Approved" : "Pending/Rejected"}</Text>
             <View style={{ marginTop: 10, marginBottom: 10 }}>
-              <Button
-                title="View Images"
-                onPress={() => openImageModal(item)}
-              />
+              <Button title="View Images" onPress={() => openImageModal(item)} />
             </View>
             <View style={{ marginTop: 10, marginBottom: 10 }}>
               <Button
                 title="Approve"
-                onPress={() => approveContributor(item._id)}
+                onPress={() => approver(item.Id,1)}
                 style={styles.approveButton}
+                disabled={item.isApproved}
               />
             </View>
             <View style={{ marginTop: 10, marginBottom: 10 }}>
               <Button
                 title="Reject"
-                onPress={() => rejectContributor(item.id)}
+                onPress={() => approver(item.Id,0)}
                 style={styles.rejectButton}
+                disabled={item.isApproved === false}
               />
             </View>
           </View>
         )}
       />
-      {/* Modal for viewing images */}
       <Modal
-        visible={!!selectedContributor}
+        visible={!!mod}
         animationType="slide"
         onRequestClose={closeImageModal}
       >
         <View style={styles.modalContainer}>
           <Button title="Close" onPress={closeImageModal} />
-          {selectedContributor && (
+          {mod && (
             <View>
               <Text>Aadhar Card:</Text>
               <Image
-               source={{ uri: selectedContributor.aadhar }}
+                source={{ uri: mod.Aadhar }}
                 style={styles.image}
               />
               <Text>Pan Card:</Text>
               <Image
-               source={{ uri: selectedContributor.pan }}
+                source={{ uri: mod.Pan }}
                 style={styles.image}
               />
               <Text>License:</Text>
               <Image
-               source={{ uri: selectedContributor.doc }}
+                source={{ uri: mod.Doc }}
                 style={styles.image}
               />
             </View>

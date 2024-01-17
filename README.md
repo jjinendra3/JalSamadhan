@@ -1,22 +1,28 @@
-# Disaster Alert and Response App Readme
+# JalSamadhan
 
 ## Overview
 
-Welcome to the JalSamadhan, a comprehensive mobile application designed to enhance disaster preparedness, response, and community collaboration. This React Native and Expo-based app harnesses the power of AI/ML and crowd-sourced data to provide real-time disaster information, facilitate efficient resource allocation, and empower users to actively contribute to disaster management on both Android & iOS.
+Welcome to the JalSamadhan, a comprehensive mobile application designed to enhance disaster preparedness, response, and community collaboration. This React Native app harnesses the power of AI/ML and crowd-sourced data to provide real-time disaster information, facilitate efficient resource allocation, and empower users to actively contribute to disaster management on both Android & iOS.
 
+[Youtube Walkthrough](https://youtu.be/WiL4Lhbwo28)
 
 ## Installation
 
 1. Clone the repository:
+   
 2. Install dependencies:
+   
    ```bash
    cd JalSamadhan
    npm install
    ```
+
 3. Run the app:
+ 
    ```bash
    npx expo start
    ```
+
 4. Choose to run on either Android/iOS simulator or your physical device with the Expo Go app.
 
 

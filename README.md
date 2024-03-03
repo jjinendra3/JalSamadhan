@@ -5,6 +5,7 @@
 Welcome to the JalSamadhan, a comprehensive mobile application designed to enhance disaster preparedness, response, and community collaboration. This React Native app harnesses the power of AI/ML and crowd-sourced data to provide real-time disaster information, facilitate efficient resource allocation, and empower users to actively contribute to disaster management on both Android & iOS.
 
 [Youtube Walkthrough](https://youtu.be/WiL4Lhbwo28)
+[JalSamadhan PPT](https://docs.google.com/presentation/d/1cVrksbjecF3xDr6nReTYShQ4wQoFrYTq/edit?usp=sharing&ouid=109652277505503498062&rtpof=true&sd=true)
 
 ## Installation
 
